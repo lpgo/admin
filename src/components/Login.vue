@@ -41,11 +41,32 @@
         this.$refs.ruleForm2.resetFields();
       },
       handleSubmit2(ev) {
-        var _this=this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            //_this.$router.push('/table');
-            _this.$router.replace('/table');
+            this.$router.replace('/addMerchant');
+
+            
+            const data = new FormData();
+            data.append("name",this.ruleForm2.account);
+            data.append("pwd",this.ruleForm2.checkPass);
+            fetch("/login",
+              {
+                method: "POST",
+                body:data,
+              }
+            ).then(resp => resp.json())
+            .then(result => {
+              if(result.Ok) {
+                this.$router.replace('/addMerchant');
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: '用户名或密码错误',
+                  type: 'error'
+                });
+              }
+            });
+            return true;
           } else {
             console.log('error submit!!');
             return false;

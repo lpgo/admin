@@ -12,12 +12,13 @@ import 'nprogress/nprogress.css'
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
 import Main from './components/Main.vue'
-import Table from './components/nav1/Table.vue'
-import Form from './components/nav1/Form.vue'
-import Page3 from './components/nav1/Page3.vue'
-import Page4 from './components/nav2/Page4.vue'
-import Page5 from './components/nav2/Page5.vue'
-import Page6 from './components/nav3/Page6.vue'
+import AddMerchant from './components/nav1/AddMerchant.vue'
+import ModifyMerchant from './components/nav1/ModifyMerchant.vue'
+import MerchantPay from './components/nav1/MerchantPay.vue'
+import HotelInfo from './components/nav2/HotelInfo.vue'
+import AddWaiter from './components/nav2/AddWaiter.vue'
+import DeskConfig from './components/nav2/DeskConfig.vue'
+import Statistics from './components/nav2/Statistics.vue'
 import echarts from './components/charts/echarts.vue'
 
 Vue.use(ElementUI)
@@ -34,33 +35,25 @@ const routes = [
   {
     path: '/',
     component: Home,
-    name: '导航一',
+    name: '商户管理',
     iconCls: 'el-icon-message',//图标样式class
     children: [
       //{ path: '/main', component: Main },
-      { path: '/table', component: Table, name: 'Table' },
-      { path: '/form', component: Form, name: 'Form' },
-      { path: '/page3', component: Page3, name: '页面3' },
+      { path: '/addMerchant', component: AddMerchant, name: '添加商户' },
+      { path: '/modifyMerchant', component: ModifyMerchant, name: '商户修改' },
+      { path: '/merchantPay', component: MerchantPay, name: '商户续费' },
     ]
   },
   {
     path: '/',
     component: Home,
-    name: '导航二',
+    name: '饭店管理',
     iconCls: 'fa fa-id-card-o',
     children: [
-      { path: '/page4', component: Page4, name: '页面4' },
-      { path: '/page5', component: Page5, name: '页面5' }
-    ]
-  },
-  {
-    path: '/',
-    component: Home,
-    name: '',
-    iconCls: 'fa fa-address-card',
-    leaf: true,//只有一个节点
-    children: [
-      { path: '/page6', component: Page6, name: '导航三' }
+      { path: '/hotelInfo', component: HotelInfo, name: '基本信息' },
+      { path: '/addWaiter', component: AddWaiter, name: '添加服务员' },
+      { path: '/deskConfig', component: DeskConfig, name: '餐桌配置' },
+      { path: '/statistics', component: Statistics, name: '消费统计' },
     ]
   },
   {
