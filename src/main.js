@@ -19,6 +19,7 @@ import HotelInfo from './components/nav2/HotelInfo.vue'
 import AddWaiter from './components/nav2/AddWaiter.vue'
 import DeskConfig from './components/nav2/DeskConfig.vue'
 import Statistics from './components/nav2/Statistics.vue'
+import MenuConfig from './components/nav2/MenuConfig.vue'
 import echarts from './components/charts/echarts.vue'
 
 Vue.use(ElementUI)
@@ -50,6 +51,7 @@ const routes = [
     name: '饭店管理',
     iconCls: 'fa fa-id-card-o',
     children: [
+      { path: '/menuConfig', component: MenuConfig, name: '菜单配置' },
       { path: '/hotelInfo', component: HotelInfo, name: '基本信息' },
       { path: '/addWaiter', component: AddWaiter, name: '添加服务员' },
       { path: '/deskConfig', component: DeskConfig, name: '餐桌配置' },

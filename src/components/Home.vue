@@ -14,7 +14,7 @@
 		<el-col :span="24" class="panel-center">
 			<!--<el-col :span="4">-->
 			<aside style="width:230px;">
-				<h5 class="admin"><i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>欢迎系统管理员：测试</h5>
+				<h5 class="admin"><i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>欢迎系统管理员：{{role}}</h5>
 				<!--<el-menu style="border-top: 1px solid #475669;" default-active="/table" class="el-menu-vertical-demo" @open="handleopen"
 					@close="handleclose" @select="handleselect" theme="dark" unique-opened router>
 					<el-submenu index="1">
@@ -66,6 +66,9 @@
 </template>
 
 <script>
+
+import { mapState  } from 'vuex'
+
   export default {
     data() {
       return {
@@ -90,30 +93,34 @@
 		}
 	},
     methods: {
-      onSubmit() {
-        console.log('submit!');
-      },
-			handleopen(){
-				//console.log('handleopen');
-			},
-			handleclose(){
-				//console.log('handleclose');
-			},
-            handleselect:function(a,b){
-            },
-			//退出登录
-			logout:function(){
-				var _this=this;
-				this.$confirm('确认退出吗?', '提示', {
-					//type: 'warning'
-				}).then(() => {
-					_this.$router.replace('/login');
-				}).catch(() => {
-							
-				});
-
-				
-			}
+		onSubmit() {
+			console.log('submit!');
+		},
+		handleopen(){
+			//console.log('handleopen');
+		},
+		handleclose(){
+			//console.log('handleclose');
+		},
+	    handleselect:function(a,b){
+	    },
+		//退出登录
+		logout:function(){
+			var _this=this;
+			this.$confirm('确认退出吗?', '提示', {
+				//type: 'warning'
+			}).then(() => {
+				_this.$router.replace('/login');
+			}).catch(() => {
+						
+			});
+		}
+    },
+    computed:{
+    	...mapState({
+    		role: state => state.user.role,
+    		hid: state => state.hotel.hid,
+    	})
     }
   }
 </script>

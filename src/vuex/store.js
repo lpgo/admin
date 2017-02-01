@@ -7,16 +7,21 @@ Vue.use(Vuex)
 
 // 应用初始状态
 const state = {
-    count: 10
+    hotel: {
+        hid:'',
+    },
+    user:{
+        role:'',
+    }
 }
 
 // 定义所需的 mutations
 const mutations = {
-    INCREMENT(state) {
-        state.count++
+    setHid(state,hid) {
+        state.hotel.hid = hid;
     },
-    DECREMENT(state) {
-        state.count--
+    setRole(state,role) {
+        state.user.role = role;
     }
 }
 

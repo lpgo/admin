@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
   export default {
     data() {
       return {
@@ -43,9 +45,6 @@
       handleSubmit2(ev) {
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            this.$router.replace('/addMerchant');
-
-            
             const data = new FormData();
             data.append("name",this.ruleForm2.account);
             data.append("pwd",this.ruleForm2.checkPass);
@@ -56,7 +55,9 @@
               }
             ).then(resp => resp.json())
             .then(result => {
-              if(result.Ok) {
+              if(result.ok) {
+                this.setHid(result.hid)
+                this.setRole(result.role)
                 this.$router.replace('/addMerchant');
               } else {
                 this.$message({
@@ -72,7 +73,11 @@
             return false;
           }
         });
-      }
+      },
+      ...mapMutations([
+        'setHid',
+        'setRole', // 映射 this.increment() 为 this.$store.commit('increment')
+      ]),
     }
   }
 </script>
