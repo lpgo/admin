@@ -9,8 +9,14 @@
           <span v-for="p in scope.row.prices" style="padding-right:10px">{{p.standard}}:{{p.price}}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="120">
+      <el-table-column fixed="right" label="操作" width="230">
         <template scope="scope">
+          <el-button @click.native.prevent="moveUp(scope.$index, menus)" size="small" icon="caret-top">
+              上移
+          </el-button>
+          <el-button @click.native.prevent="moveDown(scope.$index, menus)" size="small" icon="caret-bottom">
+            下移
+          </el-button>
           <el-button
             @click.native.prevent="deleteMenu(scope.$index, menus)"
             type="text"
@@ -148,7 +154,7 @@ export default {
       this.menuTypes.push({name:this.typeForm.name,order:this.menuTypes.length});
     },
     addMenu() {
-      this.menus.push({name:this.form.name,prices:this.form.prices,type:this.form.type});
+      this.menus.push({name:this.form.name,prices:this.form.prices,type:this.form.type,order:this.menus.length});
       this.addMenuVisible = false;
     },
     addPrice() {
@@ -166,7 +172,6 @@ export default {
       var temp = array[index -1];
       array[index-1] = array[index];
       array[index-1].order = index -1;
-      //array[index] = temp;
       this.$set(array, index, temp);
       array[index].order = index;
     },
@@ -175,7 +180,6 @@ export default {
       var temp = array[index +1];
       array[index+1] = array[index];
       array[index+1].order = index +1;
-      //array[index] = temp;
       this.$set(array, index, temp);
       array[index].order = index;
     },
