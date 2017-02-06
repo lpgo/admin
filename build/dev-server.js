@@ -60,6 +60,9 @@ app.use(staticPath, express.static('./static'))
 app.post("/login",function(req,res){
   res.json({ok:true,role:"经理",hid:"588ee0ea31f7c50c771d50c2"})
 });
+app.post("/upload",function(req,res){
+  res.json({ok:true,name:"/public/image/a.jpg"})
+});
 
 module.exports = app.listen(port, function (err) {
   if (err) {
