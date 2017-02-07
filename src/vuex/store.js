@@ -12,6 +12,7 @@ const state = {
     },
     user:{
         role:'',
+        name:'',
     }
 }
 
@@ -22,6 +23,9 @@ const mutations = {
     },
     setRole(state,role) {
         state.user.role = role;
+    },
+    setName(state,name) {
+        state.user.name = name;
     }
 }
 

@@ -32,7 +32,7 @@ const routes = [
     component: Login,
     hidden: true//不显示在导航中
   },
-  //{ path: '/main', component: Main },
+  //admin:1,operator:2,manager:3,waiter:4,client:5,unknown:6,
   {
     path: '/',
     component: Home,
@@ -43,7 +43,8 @@ const routes = [
       { path: '/addMerchant', component: AddMerchant, name: '添加商户' },
       { path: '/modifyMerchant', component: ModifyMerchant, name: '商户修改' },
       { path: '/merchantPay', component: MerchantPay, name: '商户续费' },
-    ]
+    ],
+    role:1
   },
   {
     path: '/',
@@ -56,7 +57,8 @@ const routes = [
       { path: '/addWaiter', component: AddWaiter, name: '添加服务员' },
       { path: '/deskConfig', component: DeskConfig, name: '餐桌配置' },
       { path: '/statistics', component: Statistics, name: '消费统计' },
-    ]
+    ],
+    role:3
   },
   {
     path: '/',
@@ -65,7 +67,8 @@ const routes = [
     iconCls: 'fa fa-bar-chart',
     children: [
       { path: '/echarts', component: echarts, name: 'echarts' }
-    ]
+    ],
+    role:1
   }
 ]
 

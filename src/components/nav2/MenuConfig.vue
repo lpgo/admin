@@ -6,7 +6,7 @@
       <el-table-column prop="type" label="类型"></el-table-column>
       <el-table-column prop="prices" label="价格" >
         <template scope="scope">
-          <span v-for="p in scope.row.prices" style="padding-right:10px">{{p.standard}}:{{p.price}}</span>
+          <span v-for="p in scope.row.prices" style="padding-right:10px">{{p.std}}:{{p.price}}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="230">
@@ -90,7 +90,7 @@
         </el-form-item>
         <el-form-item label="价格" :label-width="formLabelWidth">
           <el-row>
-            <span v-for="p in form.prices" style="padding-right:10px">{{p.standard}}:{{p.price}}</span>
+            <span v-for="p in form.prices" style="padding-right:10px">{{p.std}}:{{p.price}}</span>
           </el-row>
           <el-row >
             <el-col :span="9">
@@ -119,7 +119,8 @@
 
 <script>
 import { mapStates } from 'vuex'
-
+import util from '../../common/util.js'
+ 
 export default {
 
   data() {
@@ -151,14 +152,18 @@ export default {
 
   methods: {
     addType() {
-      this.menuTypes.push({name:this.typeForm.name,order:this.menuTypes.length});
+      let t = {name:this.typeForm.name,order:this.menuTypes.length};
+      this.menuTypes.push(t);
+      util.post(this,"/manager/addMenuType",t,function(result){
+        t.id = result.text
+      });
     },
     addMenu() {
       this.menus.push({name:this.form.name,prices:this.form.prices,type:this.form.type,order:this.menus.length});
       this.addMenuVisible = false;
     },
     addPrice() {
-      this.form.prices.push({standard:this.form.standard,price:this.form.price});
+      this.form.prices.push({std:this.form.standard,price:this.form.price});
     },
     deleteMenu(index,array) {
       array.splice(index,1);

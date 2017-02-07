@@ -56,6 +56,37 @@ export default {
             return null;
         }
 
+    },
+
+    post: function(vue,url,data,cb) {
+        const form = new FormData();
+        for(let key in data) {
+            form.append(key,data[key]);
+        }
+        fetch(url,
+          {
+            method: "POST",
+            body:form,
+          }
+        ).then(resp => resp.json())
+        .then(result => {
+          if(result.ok) {
+            cb(result.data)
+          } else {
+            vue.$message({
+              showClose: true,
+              message: result.text,
+              type: 'error'
+            });
+          }
+        }).catch(err => {
+            console.log(err);
+            vue.$message({
+              showClose: true,
+              message: err.name,
+              type: 'error'
+            });
+        });
     }
 
 };

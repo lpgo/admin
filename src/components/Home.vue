@@ -14,7 +14,7 @@
 		<el-col :span="24" class="panel-center">
 			<!--<el-col :span="4">-->
 			<aside style="width:230px;">
-				<h5 class="admin"><i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>欢迎系统管理员：{{role}}</h5>
+				<h5 class="admin"><i class="fa fa-user" aria-hidden="true" style="margin-right:5px;"></i>欢迎系统管理员：{{name}}</h5>
 				<!--<el-menu style="border-top: 1px solid #475669;" default-active="/table" class="el-menu-vertical-demo" @open="handleopen"
 					@close="handleclose" @select="handleselect" theme="dark" unique-opened router>
 					<el-submenu index="1">
@@ -32,7 +32,7 @@
 				</el-menu>-->
 				<el-menu style="border-top: 1px solid #475669;" default-active="/table" class="el-menu-vertical-demo" @open="handleopen"
 					@close="handleclose" @select="handleselect" theme="dark" unique-opened router>
-					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
+					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden&&item.role==role">
 						<el-submenu :index="index+''" v-if="!item.leaf">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
 							<el-menu-item v-for="child in item.children" :index="child.path">{{child.name}}</el-menu-item>
@@ -72,8 +72,8 @@ import { mapState  } from 'vuex'
   export default {
     data() {
       return {
-		  currentPathName:'Table',
-		  currentPathNameParent:'导航一',
+		  currentPathName:'',
+		  currentPathNameParent:'',
         form: {
           name: '',
           region: '',
@@ -118,6 +118,7 @@ import { mapState  } from 'vuex'
     },
     computed:{
     	...mapState({
+    		name: state => state.user.name,
     		role: state => state.user.role,
     		hid: state => state.hotel.hid,
     	})

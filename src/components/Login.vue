@@ -56,9 +56,10 @@ import { mapMutations } from 'vuex'
             ).then(resp => resp.json())
             .then(result => {
               if(result.ok) {
-                this.setHid(result.hid)
-                this.setRole(result.role)
-                this.$router.replace('/addMerchant');
+                this.setHid(result.data.hid)
+                this.setRole(result.data.role)
+                this.setName(result.data.name)
+                this.$router.replace('/');
               } else {
                 this.$message({
                   showClose: true,
@@ -76,7 +77,8 @@ import { mapMutations } from 'vuex'
       },
       ...mapMutations([
         'setHid',
-        'setRole', // 映射 this.increment() 为 this.$store.commit('increment')
+        'setRole',
+        'setName', // 映射 this.increment() 为 this.$store.commit('increment')
       ]),
     }
   }

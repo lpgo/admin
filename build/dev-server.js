@@ -58,7 +58,7 @@ var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsS
 app.use(staticPath, express.static('./static'))
 
 app.post("/login",function(req,res){
-  res.json({ok:true,role:"经理",hid:"588ee0ea31f7c50c771d50c2"})
+  res.json({ok:true,data:{role:3,hid:"588ee0ea31f7c50c771d50c2",name:"admin"}})
 });
 app.post("/upload",function(req,res){
   res.json({ok:true,name:"/public/image/a.jpg"})
