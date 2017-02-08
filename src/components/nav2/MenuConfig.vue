@@ -11,14 +11,14 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="230">
         <template scope="scope">
-          <el-button @click.native.prevent="moveUp(scope.$index, menus)" size="small" icon="caret-top">
+          <el-button @click.native.prevent="moveUp(scope.$index, menus, 'menus')" size="small" icon="caret-top">
               上移
           </el-button>
-          <el-button @click.native.prevent="moveDown(scope.$index, menus)" size="small" icon="caret-bottom">
+          <el-button @click.native.prevent="moveDown(scope.$index, menus, 'menus')" size="small" icon="caret-bottom">
             下移
           </el-button>
           <el-button
-            @click.native.prevent="deleteMenu(scope.$index, menus)"
+            @click.native.prevent="deleteMenu(scope.$index, menus,'menus')"
             type="text"
             size="small">
             删除
@@ -41,14 +41,14 @@
         <el-table-column prop="name" label="名称"></el-table-column>
         <el-table-column fixed="right" label="操作" >
           <template scope="scope">
-            <el-button @click.native.prevent="moveUp(scope.$index, menuTypes)" size="small" icon="caret-top">
+            <el-button @click.native.prevent="moveUp(scope.$index, menuTypes, 'menuTypes')" size="small" icon="caret-top">
               上移
             </el-button>
-            <el-button @click.native.prevent="moveDown(scope.$index, menuTypes)" size="small" icon="caret-bottom">
+            <el-button @click.native.prevent="moveDown(scope.$index, menuTypes, 'menuTypes')" size="small" icon="caret-bottom">
               下移
             </el-button>
             <el-button
-              @click.native.prevent="deleteMenu(scope.$index, menuTypes)"
+              @click.native.prevent="deleteMenu(scope.$index, menuTypes, 'menuTypes')"
               type="text"
               size="small">
               删除
@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { mapStates } from 'vuex'
+import { mapState } from 'vuex'
 import util from '../../common/util.js'
  
 export default {
@@ -147,46 +147,90 @@ export default {
   },
 
 	computed: {
-  	
+  	 ...mapState({
+        hid: state => state.hotel.hid,
+      })
+  },
+
+  beforeMount: function() {
+    util.postForm(this,"/manager/getAllMenuTypes",{hid:this.hid},result => {
+      console.log(result.data);
+      this.menuTypes.push(...result.data);  
+    });
+    util.postForm(this,"/manager/getAllMenus",{hid:this.hid},result => {
+      console.log(result.data);
+      this.menus.push(...result.data);  
+    });
   },
 
   methods: {
     addType() {
       let t = {name:this.typeForm.name,order:this.menuTypes.length};
       this.menuTypes.push(t);
-      util.post(this,"/manager/addMenuType",t,function(result){
+      util.postForm(this,"/manager/addMenuType",t,function(result){
         t.id = result.text
       });
     },
     addMenu() {
-      this.menus.push({name:this.form.name,prices:this.form.prices,type:this.form.type,order:this.menus.length});
+      let t = {name:this.form.name,prices:this.form.prices,type:this.form.type,order:this.menus.length};
+      this.menus.push(t);
+      util.postJson(this,"/manager/addMenu",t,function(result){
+        t.id = result.text;
+      });
       this.addMenuVisible = false;
     },
     addPrice() {
       this.form.prices.push({std:this.form.standard,price:this.form.price});
     },
-    deleteMenu(index,array) {
+    deleteMenu(index,array,db) {
       array.splice(index,1);
+      if(db == "menus") {
+        if(array[index].id) {
+          util.postForm(this,"/manager/deleteMenu",{id:array[index].id},function(){});
+        }
+      } else {
+        if(array[index].id) {
+          util.postForm(this,"/manager/deleteMenuType",{id:array[index].id},function(){});
+        }
+      }
     },
     fileuploadSuccess() {
       console.log(response);
-      this.form.pic = response.name;
+      this.form.pic = response.data.text;
     },
-    moveUp(index, array) {
+    moveUp(index, array, db) {
       if(index < 1) return ;
       var temp = array[index -1];
       array[index-1] = array[index];
       array[index-1].order = index -1;
       this.$set(array, index, temp);
       array[index].order = index;
+      if(db == "menus") {
+        if(array[index-1].id && array[index].id) {
+          util.postJson(this,"/manager/changeMenuOrder",[array[index-1],array[index]],function(){})
+        }
+      } else {
+        if(array[index-1].id && array[index].id) {
+          util.postJson(this,"/manager/changeMenuTypeOrder",[array[index-1],array[index]],function(){})
+        }
+      }
     },
-    moveDown(index, array) {
+    moveDown(index, array, db) {
       if(index > array.length -2) return ;
       var temp = array[index +1];
       array[index+1] = array[index];
       array[index+1].order = index +1;
       this.$set(array, index, temp);
       array[index].order = index;
+      if(db == "menus") {
+        if(array[index+1].id && array[index].id) {
+          util.postJson(this,"/manager/changeMenuOrder",[array[index+1],array[index]],function(){})
+        }
+      } else {
+        if(array[index+1].id && array[index].id) {
+          util.postJson(this,"/manager/changeMenuTypeOrder",[array[index+1],array[index]],function(){})
+        }
+      }
     },
   }
 }

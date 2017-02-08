@@ -63,6 +63,9 @@ app.post("/login",function(req,res){
 app.post("/upload",function(req,res){
   res.json({ok:true,name:"/public/image/a.jpg"})
 });
+app.post("/manager/getAllMenuTypes",function(req,res){
+  res.json({ok:true,data:[{id:"12312",name:"热菜",order:0},{id:"12332",name:"凉菜",order:1}]})
+});
 
 module.exports = app.listen(port, function (err) {
   if (err) {

@@ -17,6 +17,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import util from '../common/util.js'
 
   export default {
     data() {
@@ -45,28 +46,11 @@ import { mapMutations } from 'vuex'
       handleSubmit2(ev) {
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            const data = new FormData();
-            data.append("name",this.ruleForm2.account);
-            data.append("pwd",this.ruleForm2.checkPass);
-            fetch("/login",
-              {
-                method: "POST",
-                body:data,
-              }
-            ).then(resp => resp.json())
-            .then(result => {
-              if(result.ok) {
-                this.setHid(result.data.hid)
-                this.setRole(result.data.role)
-                this.setName(result.data.name)
-                this.$router.replace('/');
-              } else {
-                this.$message({
-                  showClose: true,
-                  message: '用户名或密码错误',
-                  type: 'error'
-                });
-              }
+            util.postForm(this,"/login",{name:this.ruleForm2.account,pwd:this.ruleForm2.checkPass},result => {
+              this.setHid(result.data.hid)
+              this.setRole(result.data.role)
+              this.setName(result.data.name)
+              this.$router.replace('/');
             });
             return true;
           } else {

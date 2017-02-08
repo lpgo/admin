@@ -58,20 +58,21 @@ export default {
 
     },
 
-    post: function(vue,url,data,cb) {
+    postForm: function(vue,url,data,cb) {
         const form = new FormData();
         for(let key in data) {
             form.append(key,data[key]);
         }
         fetch(url,
           {
+            credentials:"include",
             method: "POST",
             body:form,
           }
         ).then(resp => resp.json())
-        .then(result => {
+        .then(function(result){
           if(result.ok) {
-            cb(result.data)
+            cb(result)
           } else {
             vue.$message({
               showClose: true,
@@ -85,6 +86,34 @@ export default {
               showClose: true,
               message: err.name,
               type: 'error'
+            });
+        });
+    },
+
+    postJson: function(vue,url,data,cb) {
+        fetch(url,
+          {
+            credentials:"include",
+            method: "POST",
+            body:JSON.stringify(data),
+          }
+        ).then(resp => resp.json())
+        .then(function(result){
+          if(result.ok) {
+            cb(result)
+          } else {
+            vue.$message({
+              showClose: true,
+              message: result.text,
+              type: 'error'
+            });
+          }
+        }).catch(err => {
+            console.log(err);
+            vue.$message({
+              showClose: true,
+              message: err.name,
+              type: 'error' 
             });
         });
     }
