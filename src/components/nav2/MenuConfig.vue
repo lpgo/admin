@@ -3,7 +3,11 @@
     <el-table :data="menus" height="450" border style="width: 100%" stripe>
       <el-table-column type="index" label="序号" width="70" ></el-table-column>
       <el-table-column prop="name" label="名称" ></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
+      <el-table-column label="类型">
+        <template scope="scope">
+          {{menuType(scope.row.type)}}
+        </template>
+      </el-table-column>
       <el-table-column prop="prices" label="价格" >
         <template scope="scope">
           <span v-for="p in scope.row.prices" style="padding-right:10px">{{p.std}}:{{p.price}}</span>
@@ -85,7 +89,7 @@
         </el-form-item>
         <el-form-item label="类型" :label-width="formLabelWidth">
             <el-radio-group v-model="form.type">
-              <el-radio :label="t.name" v-for="t in menuTypes">{{t.name}}</el-radio>
+              <el-radio :label="t.id" v-for="t in menuTypes">{{t.name}}</el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item label="价格" :label-width="formLabelWidth">
@@ -132,7 +136,7 @@ export default {
         name:'',
         prices:[],
         standard:'标准',
-        price:'',
+        price:0.0,
         pic:'',
         type:'',
       },
@@ -149,7 +153,7 @@ export default {
 	computed: {
   	 ...mapState({
         hid: state => state.hotel.hid,
-      })
+      }),
   },
 
   beforeMount: function() {
@@ -163,14 +167,14 @@ export default {
 
   methods: {
     addType() {
-      let t = {name:this.typeForm.name,order:this.menuTypes.length};
+      let t = {name:this.typeForm.name,order:this.menuTypes.length,hid:this.hid};
       this.menuTypes.push(t);
       util.postForm(this,"/manager/addMenuType",t,function(result){
         t.id = result.text
       });
     },
     addMenu() {
-      let t = {name:this.form.name,prices:this.form.prices,type:this.form.type,order:this.menus.length};
+      let t = {name:this.form.name,prices:this.form.prices,type:this.form.type,order:this.menus.length,hid:this.hid};
       this.menus.push(t);
       util.postJson(this,"/manager/addMenu",t,function(result){
         t.id = result.text;
@@ -178,7 +182,16 @@ export default {
       this.addMenuVisible = false;
     },
     addPrice() {
-      this.form.prices.push({std:this.form.standard,price:this.form.price});
+      let price = parseFloat(this.form.price);
+      if (isNaN(price)) {
+        this.$message({
+          showClose: true,
+          message: "价格不正确",
+          type: 'error'
+        });
+        return;
+      }
+      this.form.prices.push({std:this.form.standard,price:price});
     },
     deleteMenu(index,array,db) {
       array.splice(index,1);
@@ -193,7 +206,7 @@ export default {
       }
     },
     fileuploadSuccess(response) {
-      this.form.pic = response.data.text;
+      this.form.pic = response.text;
     },
     moveUp(index, array, db) {
       if(index < 1) return ;
@@ -227,6 +240,12 @@ export default {
         if(array[index+1].id && array[index].id) {
           util.postJson(this,"/manager/changeMenuTypeOrder",[array[index+1],array[index]],function(){})
         }
+      }
+    },
+    menuType(id) {
+      for(var t of this.menuTypes) {
+        if(t.id == id)
+          return t.name
       }
     },
   }

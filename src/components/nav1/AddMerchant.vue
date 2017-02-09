@@ -115,7 +115,7 @@
       },
 
       fileuploadSuccess:function(response) {
-      	this.form.pic = response.data.text;
+      	this.form.pic = response.text;
       }
     }
   }
