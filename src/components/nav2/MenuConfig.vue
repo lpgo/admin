@@ -154,11 +154,9 @@ export default {
 
   beforeMount: function() {
     util.postForm(this,"/manager/getAllMenuTypes",{hid:this.hid},result => {
-      console.log(result.data);
       this.menuTypes.push(...result.data);  
     });
     util.postForm(this,"/manager/getAllMenus",{hid:this.hid},result => {
-      console.log(result.data);
       this.menus.push(...result.data);  
     });
   },
@@ -194,8 +192,7 @@ export default {
         }
       }
     },
-    fileuploadSuccess() {
-      console.log(response);
+    fileuploadSuccess(response) {
       this.form.pic = response.data.text;
     },
     moveUp(index, array, db) {

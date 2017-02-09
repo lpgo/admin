@@ -115,7 +115,6 @@
       },
 
       fileuploadSuccess:function(response) {
-      	console.log(response);
       	this.form.pic = response.data.text;
       }
     }
