@@ -20,6 +20,7 @@ import AddWaiter from './components/nav2/AddWaiter.vue'
 import DeskConfig from './components/nav2/DeskConfig.vue'
 import Statistics from './components/nav2/Statistics.vue'
 import MenuConfig from './components/nav2/MenuConfig.vue'
+import CurrentOrder from './components/nav3/CurrentOrder.vue'
 import echarts from './components/charts/echarts.vue'
 
 Vue.use(ElementUI)
@@ -57,6 +58,16 @@ const routes = [
       { path: '/addWaiter', component: AddWaiter, name: '添加服务员' },
       { path: '/deskConfig', component: DeskConfig, name: '餐桌配置' },
       { path: '/statistics', component: Statistics, name: '消费统计' },
+    ],
+    role:3
+  },
+  {
+    path: '/',
+    component: Home,
+    name: '订单管理',
+    iconCls: 'fa fa-id-card-o',
+    children: [
+      { path: '/currentOrder', component: CurrentOrder, name: '当前订单' },
     ],
     role:3
   },
