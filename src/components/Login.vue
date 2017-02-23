@@ -7,7 +7,7 @@
     <el-form-item prop="checkPass">
       <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码" @keyup.enter.prevent="handleSubmit2"></el-input>
     </el-form-item>
-    <el-checkbox v-model="checked" checked style="margin:0px 0px 35px 0px;">记住密码</el-checkbox>
+    <el-checkbox v-model="print" style="margin:0px 0px 35px 0px;">后厨打印</el-checkbox>
     <el-form-item style="width:100%;">
       <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2">登录</el-button>
       <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
@@ -36,7 +36,7 @@ import util from '../common/util.js'
             //{ validator: validaePass2 }
           ]
         },
-        checked: true
+        print: false,   //后厨打印
       };
     },
     methods: {
@@ -47,9 +47,10 @@ import util from '../common/util.js'
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
             util.postForm(this,"/login",{name:this.ruleForm2.account,pwd:this.ruleForm2.checkPass},result => {
-              this.setHid(result.data.hid)
-              this.setRole(result.data.role)
-              this.setName(result.data.name)
+              this.setHid(result.data.hid);
+              this.setRole(result.data.role);
+              this.setName(result.data.name);
+              this.setPrint(this.print);
               this.$router.replace('/');
             });
             return true;
@@ -62,7 +63,8 @@ import util from '../common/util.js'
       ...mapMutations([
         'setHid',
         'setRole',
-        'setName', // 映射 this.increment() 为 this.$store.commit('increment')
+        'setName',
+        'setPrint'
       ]),
     }
   }

@@ -13,6 +13,7 @@ const state = {
     user:{
         role:'',
         name:'',
+        isPrint:false,
     }
 }
 
@@ -26,6 +27,9 @@ const mutations = {
     },
     setName(state,name) {
         state.user.name = name;
+    },
+    setPrint(state,isPrint) {
+        state.user.isPrint = isPrint;
     }
 }
 

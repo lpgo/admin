@@ -3,8 +3,11 @@
 		<el-col :span="24" class="panel-top">
 			<el-col :span="20" style="font-size:26px;">
 				<img src="../assets/logo4.png" class="logo"> <span>AD<i style="color:#20a0ff">MIN</i></span>
+				<el-tag type="success" v-if="isPrint && isConn">已连接</el-tag>
+				<el-tag type="error"  v-if="isPrint && !isConn">未连接</el-tag>
 			</el-col>
 			<el-col :span="4">
+
 				<el-tooltip class="item tip-logout" effect="dark" content="退出" placement="bottom" style="padding:0px;">
 					<!--<i class="logout" v-on:click="logout"></i>-->
 					<i class="fa fa-sign-out" aria-hidden="true" v-on:click="logout"></i>
@@ -71,20 +74,21 @@ import { mapState  } from 'vuex'
 
   export default {
     data() {
-      return {
-		  currentPathName:'',
-		  currentPathNameParent:'',
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
-      }
+      	return {
+			currentPathName:'',
+			currentPathNameParent:'',
+			isConn:false,
+		    form: {
+		      name: '',
+		      region: '',
+		      date1: '',
+		      date2: '',
+		      delivery: false,
+		      type: [],
+		      resource: '',
+		      desc: ''
+		    }
+      	}
     },
 	watch: {
 		'$route' (to, from) {//监听路由改变
@@ -121,8 +125,32 @@ import { mapState  } from 'vuex'
     		name: state => state.user.name,
     		role: state => state.user.role,
     		hid: state => state.hotel.hid,
+    		isPrint: state => state.user.isPrint,
+
     	})
-    }
+    },
+    created: function() {
+    	var websocket = new WebSocket("wss://menu.geekgogo.cn/ws");
+    	websocket.onopen = () => {
+    		this.isConn = true ;
+    		websocket.send({type:1});
+    	};
+    	websocket.onerror = () => this.isConn = false;
+    	websocket.onclose = () => this.isConn = false;
+
+    	websocket.onmessage = (event) => {
+    		console.log(event.data);
+    		switch(event.data.type) {
+    			case 2 : { //确认
+    				break;
+    			}
+    			case 3 : {  //打印
+    				break;
+    			}
+
+    		}
+    	};
+    },
   }
 </script>
 
